@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccelerometerConfig", "AccelerometerConfig\AccelerometerConfig.csproj", "{E662F13A-D69A-4CF4-BB33-93CF445921ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E662F13A-D69A-4CF4-BB33-93CF445921ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E662F13A-D69A-4CF4-BB33-93CF445921ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E662F13A-D69A-4CF4-BB33-93CF445921ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E662F13A-D69A-4CF4-BB33-93CF445921ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79347C02-AE7A-4477-A526-82F4251B654B}
+	EndGlobalSection
+EndGlobal
