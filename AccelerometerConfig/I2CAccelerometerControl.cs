@@ -275,5 +275,25 @@ namespace AccelerometerConfig
             }
             return false;
         }
+
+        public static short[] GetData()
+        {
+            short[] data = new short[3];
+
+            I2CWriteAddr(Accel_Address, 0x29);
+            data[0] = BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            I2CWriteAddr(Accel_Address, 0x2B);
+            data[1] = BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            I2CWriteAddr(Accel_Address, 0x2D);
+            data[2] = BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            return data;
+        }
+
+        public static string GetConfiguration()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            return sb.ToString();
+        }
     }
 }

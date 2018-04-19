@@ -14,30 +14,39 @@ namespace AccelerometerConfig
     {
         private BackgroundWorker backgroundWorker;
         private bool continuePolling;
+        private bool connected;
         private int pollInterval;
+        private int pollCounter;
 
         public Form1()
         {
             I2CAccelerometerControl.Open();
+            connected = false;
             continuePolling = true;
-            pollInterval = 2000;
+            pollInterval = 100;
+            pollCounter = 0;
             InitializeComponent();
 
             backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_doWork);
             backgroundWorker.RunWorkerAsync();
-            backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundWorker_ProgressChanged);
             backgroundWorker.WorkerReportsProgress = true;
+            backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundWorker_NewData);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
 
-        }
+        }        
 
-        private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BackgroundWorker_NewData(object sender, ProgressChangedEventArgs e)
         {
-            if ((bool) e.UserState)
+            short[] data = (short[]) e.UserState;
+            label2.Text = "X-Axis: " + data[0];
+            label3.Text = "Y-Axis: " + data[1];
+            label4.Text = "Z-Axis: " + data[2];
+
+            if (connected)
             {
                 label1.Text = "Accelerometer Connected";
                 label1.ForeColor = Color.Green;
@@ -47,27 +56,36 @@ namespace AccelerometerConfig
                 label1.Text = "Accelerometer Not Connected";
                 label1.ForeColor = Color.Red;
             }
+
+            label5.Text = "Poll # " + pollCounter;
         }
 
         // Reads accelerometer status on a separate thread
         private void BackgroundWorker_doWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-
-            int pollCounter = 0;
+            
+            short[] data = { 0, 0, 0 };
             while (continuePolling) //*** Currently nothing changes the continuePolling variable, so this will run until the program shuts down.
             {
-                pollCounter++;
-                System.Threading.Thread.Sleep(pollInterval); 
-                bool connected = I2CAccelerometerControl.VerifyAccelerometer();
+                System.Threading.Thread.Sleep(pollInterval);
+
+                connected = I2CAccelerometerControl.VerifyAccelerometer();
+                
 
                 if (!connected)
                 {
                     I2CAccelerometerControl.Close();
                     I2CAccelerometerControl.Open();
+                    pollCounter = 0;
                 }
+                else
+                {
+                    data = I2CAccelerometerControl.GetData();
 
-                backgroundWorker.ReportProgress(0, connected);
+                    pollCounter++;
+                }
+                backgroundWorker.ReportProgress(0, data);
             }
         }
     }

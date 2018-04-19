@@ -1,0 +1,51 @@
+﻿
+
+
+I2C Operation
+	Slave Address 
+		Device can use up to two accelerometers.
+		If SAO is connected to ground
+			Write = 0x50
+			Read = 0x51
+		If SAO is connected to voltage	
+			Write = 0x52
+			Read = 0x53
+
+	Registers
+		0x0F = WHO_AM_I 
+			Returns 0x33
+
+		0x20 = CTRL_REG1 (Use this to disable/enable any axis or adjust the sample rate)
+		0x24 = CTRL_REG5 (Use this register to set latch options)
+			bit 5 = INT1 latch (default: 0 = unlatched)
+			bit 7 = INT2 latch (default: 0 = unlatched)
+		0x25 = CTRL_REG6 (Use this register to enable interrupts on pins)
+			bit 2 = Interrupt 1 enable (default: 0 = disabled)
+			bit 3 = Interrupt 2 enable (default: 0 = disabled)
+			bit 4 = Boot on interrupt 2 pin (default: 0 = disabled)
+			bit 5 = Sleep/wake on interrupt 2 pin (default: 0 = disabled)
+			bit 7 = Interrupt signal toggle (default: 0 = high)
+
+		0x29 OUT_X
+			X-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified.
+		0x2B OUT_Y
+			Y-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified.
+		0x2D OUT_Z
+			Z-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified.
+
+		0x30 = INT1_CFG (Enable each axis interrupt request)
+		0x31 = INT1_SRC (Tracks interrupts by axis)
+		0x32 = INT1_THS (Set interrupt threshold) ((val*16/1000)g)
+		0x33 = INT1_DURATION (Set duration required to send interrupt) (val*0.1s)
+
+		0x34 = INT2_CFG (Enable each axis interrupt request)
+		0x35 = INT2_SRC (Tracks interrupts by axis)
+		0x36 = INT2_THS (Set interrupt threshold)
+		0x37 = INT2_DURATION (Set duration required to send interrupt)
+
+
+
+
+Questions:
+	Do we want the interrupts to latch?
+	What values to set as interrupt thresholds? Durations?
