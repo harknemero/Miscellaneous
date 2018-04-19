@@ -257,26 +257,7 @@ namespace AccelerometerConfig
                 if (rtval != I2C_NO_ERROR) MCP2221.M_Mcp2221_I2cCancelCurrentTransfer(mHandle);
                 return dbuffer;
             }
-        }
-
-        
-        // This method has the combined functionality of I2CWriteAddr and I2CRead and is necessary for some TI battery gauge functions.
-        // It differs from those two methods by implementing I2cWriteNoStop and I2cReadRestart which enable it to be read as a single command.
-        private static byte[] I2CReadFrom(byte i2caddr, byte regaddr, uint length)
-        {
-            lock (locker)
-            {
-                int rtval;
-                byte[] dbuffer = new byte[length];
-                byte[] dbufferwrite = new byte[1];
-                dbufferwrite[0] = regaddr;
-                MCP2221.M_Mcp2221_I2cWriteNoStop(mHandle, (uint)dbufferwrite.Length, i2caddr, SEVENBITADDR, dbufferwrite);
-                rtval = MCP2221.M_Mcp2221_I2cReadRestart(mHandle, length, i2caddr, SEVENBITADDR, dbuffer);
-                if (rtval != I2C_NO_ERROR) MCP2221.M_Mcp2221_I2cCancelCurrentTransfer(mHandle);
-                return dbuffer;
-            }
-        }
-        
+        }        
 
         // Compares the returned device type to the type stored in static byte[] deviceType.
         // Returns true if the expected device type is returned.

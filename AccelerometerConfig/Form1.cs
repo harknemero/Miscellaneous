@@ -12,6 +12,7 @@ namespace AccelerometerConfig
 {
     public partial class Form1 : Form
     {
+        private BackgroundWorker backgroundWorker;
         private bool continuePolling;
         private int pollInterval;
 
@@ -22,9 +23,11 @@ namespace AccelerometerConfig
             pollInterval = 2000;
             InitializeComponent();
 
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_doWork);
             backgroundWorker.RunWorkerAsync();
+            backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundWorker_ProgressChanged);
+            backgroundWorker.WorkerReportsProgress = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -32,9 +35,9 @@ namespace AccelerometerConfig
 
         }
 
-        private void updateStatus(bool connected)
+        private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (connected)
+            if ((bool) e.UserState)
             {
                 label1.Text = "Accelerometer Connected";
                 label1.ForeColor = Color.Green;
@@ -58,7 +61,13 @@ namespace AccelerometerConfig
                 System.Threading.Thread.Sleep(pollInterval); 
                 bool connected = I2CAccelerometerControl.VerifyAccelerometer();
 
-                updateStatus(connected);
+                if (!connected)
+                {
+                    I2CAccelerometerControl.Close();
+                    I2CAccelerometerControl.Open();
+                }
+
+                backgroundWorker.ReportProgress(0, connected);
             }
         }
     }
