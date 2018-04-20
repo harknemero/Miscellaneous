@@ -17,6 +17,7 @@ namespace AccelerometerConfig
         private bool connected;
         private int pollInterval;
         private int pollCounter;
+        private string configString;
 
         public Form1()
         {
@@ -25,6 +26,7 @@ namespace AccelerometerConfig
             continuePolling = true;
             pollInterval = 100;
             pollCounter = 0;
+            configString = "";
             InitializeComponent();
 
             backgroundWorker = new BackgroundWorker();
@@ -37,6 +39,11 @@ namespace AccelerometerConfig
         private void button1_Click(object sender, EventArgs e)
         {
 
+            I2CAccelerometerControl.SetFrequency(Convert.ToInt32(textBox1.Text));
+            I2CAccelerometerControl.SetThreshold1(Convert.ToDouble(textBox2.Text));
+            I2CAccelerometerControl.SetDuration1(Convert.ToDouble(textBox3.Text));
+            I2CAccelerometerControl.SetThreshold2(Convert.ToDouble(textBox4.Text));
+            I2CAccelerometerControl.SetDuration2(Convert.ToDouble(textBox5.Text));
         }        
 
         private void BackgroundWorker_NewData(object sender, ProgressChangedEventArgs e)
@@ -58,6 +65,7 @@ namespace AccelerometerConfig
             }
 
             label5.Text = "Poll # " + pollCounter;
+            richTextBox1.Text = configString;
         }
 
         // Reads accelerometer status on a separate thread
@@ -78,10 +86,12 @@ namespace AccelerometerConfig
                     I2CAccelerometerControl.Close();
                     I2CAccelerometerControl.Open();
                     pollCounter = 0;
+                    configString = "";
                 }
                 else
                 {
                     data = I2CAccelerometerControl.GetData();
+                    configString = I2CAccelerometerControl.GetConfiguration();
 
                     pollCounter++;
                 }

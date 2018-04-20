@@ -2,7 +2,7 @@
 
 
 I2C Operation
-	Slave Address 
+	Slave Address (0x28 for 7-bit)
 		Device can use up to two accelerometers.
 		If SAO is connected to ground
 			Write = 0x50

@@ -293,7 +293,116 @@ namespace AccelerometerConfig
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.AppendLine("Sample Frequency: " + GetFrequency());
+            sb.AppendLine("Interrupt 1 Threshold: " + GetThreshold1());
+            sb.AppendLine("Interrupt 1 Duration: " + GetDuration1());
+            sb.AppendLine("Interrupt 2 Threshold: " + GetThreshold2());
+            sb.AppendLine("Interrupt 2 Duration: " + GetDuration2());
+
             return sb.ToString();
+        }
+
+        public static void SetFrequency(int hz)
+        {
+            uint val = 0;
+            if (hz < 1) val = 0;
+            else if (hz < 10) val = 16;
+            else if (hz < 25) val = 32;
+            else if (hz < 50) val = 48;
+            else if (hz < 100) val = 64;
+            else if (hz < 200) val = 80;
+            else if (hz < 400) val = 96;
+            else if (hz < 1600) val = 112;
+            else if (hz < 5376) val = 128;
+            else val = 144;
+
+            val += 7;
+            byte[] v = { (byte)val };
+            I2CWrite(Accel_Address, 0x20, v);
+        }
+
+        public static string GetFrequency()
+        {
+            I2CWriteAddr(Accel_Address, 0x20);
+            uint val = (uint) (I2CRead(Accel_Address, 1)[0]) / 16;
+
+            switch (val)
+            {
+                case 0: return "Power-Down Mode";
+                case 1: return "1 hz";
+                case 2: return "10 hz";
+                case 3: return "25 hz";
+                case 4: return "50 hz";
+                case 5: return "100 hz";
+                case 6: return "200 hz";
+                case 7: return "400 hz";
+                case 8: return "1600 hz";
+                default: return "5376 hz";                
+            }
+        }
+
+        public static string GetThreshold1()
+        {
+            I2CWriteAddr(Accel_Address, 0x32);
+            int val = (int)(I2CRead(Accel_Address, 1)[0]) * 16;
+            double v = val;
+            v /= 1000;
+            return "" + v + "g";
+        }
+
+        public static void SetThreshold1(double val)
+        {
+            ushort temp = (ushort) (val * 1000 / 16);
+            byte[] data = { (byte)temp };
+            I2CWrite(Accel_Address, 0x32, data);
+        }
+
+        public static string GetDuration1()
+        {
+            I2CWriteAddr(Accel_Address, 0x33);
+            int val = (int)(I2CRead(Accel_Address, 1)[0]);
+            double v = val;
+            v /= 10;
+            return "" + v + "s";
+        }
+
+        public static void SetDuration1(double val)
+        {
+            ushort temp = (ushort)(val * 10);
+            byte[] data = { (byte)temp };
+            I2CWrite(Accel_Address, 0x33, data);
+        }
+
+        public static string GetThreshold2()
+        {
+            I2CWriteAddr(Accel_Address, 0x36);
+            int val = (int)(I2CRead(Accel_Address, 1)[0]) * 16;
+            double v = val;
+            v /= 1000;
+            return "" + v + "g";
+        }
+
+        public static void SetThreshold2(double val)
+        {
+            ushort temp = (ushort)(val * 1000 / 16);
+            byte[] data = { (byte)temp };
+            I2CWrite(Accel_Address, 0x36, data);
+        }
+
+        public static string GetDuration2()
+        {
+            I2CWriteAddr(Accel_Address, 0x37);
+            int val = (int)(I2CRead(Accel_Address, 1)[0]);
+            double v = val;
+            v /= 10;
+            return "" + v + "s";
+        }
+
+        public static void SetDuration2(double val)
+        {
+            ushort temp = (ushort)(val * 10);
+            byte[] data = { (byte)temp };
+            I2CWrite(Accel_Address, 0x37, data);
         }
     }
 }
