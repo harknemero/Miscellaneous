@@ -4,6 +4,7 @@ using System.Text;
 using mcp2221_dll_m;
 using System.Threading;
 using System.ComponentModel;
+using System.Collections;
 
 namespace AccelerometerConfig
 {
@@ -341,6 +342,13 @@ namespace AccelerometerConfig
             }
         }
 
+        public static void EnableInterrupts()
+        {
+            byte[] data = new byte[1] { 0x3F };
+            I2CWrite(Accel_Address, 0x30, data);
+            I2CWrite(Accel_Address, 0x34, data);
+        }
+
         public static string GetThreshold1()
         {
             I2CWriteAddr(Accel_Address, 0x32);
@@ -373,6 +381,36 @@ namespace AccelerometerConfig
             I2CWrite(Accel_Address, 0x33, data);
         }
 
+        public static bool[] GetInterruptStatus1()
+        {
+            bool[] status = new bool[4] { false, false, false, false };
+
+            I2CWriteAddr(Accel_Address, 0x31);
+            BitArray bits = new BitArray(I2CRead(Accel_Address, 1));
+
+            if(bits.Length == 8)
+            {
+                if(bits[6])
+                {
+                    status[0] = true;
+                }
+                if(bits[5] || bits[4])
+                {
+                    status[1] = true;
+                }
+                if(bits[3] || bits[2])
+                {
+                    status[2] = true;
+                }
+                if(bits[1] || bits[0])
+                {
+                    status[3] = true;
+                }
+            }
+
+            return status;
+        }
+
         public static string GetThreshold2()
         {
             I2CWriteAddr(Accel_Address, 0x36);
@@ -403,6 +441,36 @@ namespace AccelerometerConfig
             ushort temp = (ushort)(val * 10);
             byte[] data = { (byte)temp };
             I2CWrite(Accel_Address, 0x37, data);
+        }
+
+        public static bool[] GetInterruptStatus2()
+        {
+            bool[] status = new bool[4] { false, false, false, false };
+
+            I2CWriteAddr(Accel_Address, 0x35);
+            BitArray bits = new BitArray(I2CRead(Accel_Address, 1));
+
+            if (bits.Length == 8)
+            {
+                if (bits[6])
+                {
+                    status[0] = true;
+                }
+                if (bits[5] || bits[4])
+                {
+                    status[1] = true;
+                }
+                if (bits[3] || bits[2])
+                {
+                    status[2] = true;
+                }
+                if (bits[1] || bits[0])
+                {
+                    status[3] = true;
+                }
+            }
+
+            return status;
         }
     }
 }
