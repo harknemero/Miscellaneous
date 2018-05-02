@@ -16,6 +16,8 @@ I2C Operation
 			Returns 0x33
 
 		0x20 = CTRL_REG1 (Use this to disable/enable any axis or adjust the sample rate)
+			Default = 0x07 (unpowered mode)
+		0x21 = CTRL_REG2 (Use this to disable/enable high-pass filtering to eliminate offset of acceleration output)
 		0x24 = CTRL_REG5 (Use this register to set latch options)
 			bit 5 = INT1 latch (default: 0 = unlatched)
 			bit 7 = INT2 latch (default: 0 = unlatched)
@@ -27,11 +29,11 @@ I2C Operation
 			bit 7 = Interrupt signal toggle (default: 0 = high)
 
 		0x29 OUT_X
-			X-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified.
+			X-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified. (val / 16000)
 		0x2B OUT_Y
-			Y-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified.
+			Y-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified. (val / 16000)
 		0x2D OUT_Z
-			Z-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified.
+			Z-axis acceleration data. The value is expressed in two’s complement with 8-bit data representation left-justified. (val / 16000)
 
 		0x30 = INT1_CFG (Enable each axis interrupt request)
 		0x31 = INT1_SRC (Tracks interrupts by axis)

@@ -70,7 +70,7 @@ namespace AccelerometerConfig
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             
-            short[] data = { 0, 0, 0 };
+            double[] data = { 0, 0, 0 };
             while (continuePolling) //*** Currently nothing changes the continuePolling variable, so this will run until the program shuts down.
             {
                 System.Threading.Thread.Sleep(pollInterval);
@@ -100,10 +100,10 @@ namespace AccelerometerConfig
 
         private void BackgroundWorker_NewData(object sender, ProgressChangedEventArgs e)
         {
-            short[] data = (short[])e.UserState;
-            label2.Text = "X-Axis: " + data[0];
-            label3.Text = "Y-Axis: " + data[1];
-            label4.Text = "Z-Axis: " + data[2];
+            double[] data = (double[])e.UserState;
+            label2.Text = "X-Axis: " + data[0].ToString("N3");
+            label3.Text = "Y-Axis: " + data[1].ToString("N3");
+            label4.Text = "Z-Axis: " + data[2].ToString("N3");
 
             if (connected)
             {
@@ -127,65 +127,33 @@ namespace AccelerometerConfig
             {
                 label13.ForeColor = Color.Red;
             }
-            else
-            {
-                label13.ForeColor = Color.Black;
-            }
             if (interrupt1Status[1])
             {
                 label14.ForeColor = Color.Red;
-            }
-            else
-            {
-                label14.ForeColor = Color.Black;
             }
             if (interrupt1Status[2])
             {
                 label15.ForeColor = Color.Red;
             }
-            else
-            {
-                label15.ForeColor = Color.Black;
-            }
             if (interrupt1Status[3])
             {
                 label16.ForeColor = Color.Red;
-            }
-            else
-            {
-                label16.ForeColor = Color.Black;
             }
             if (interrupt2Status[0])
             {
                 label17.ForeColor = Color.Red;
             }
-            else
-            {
-                label17.ForeColor = Color.Black;
-            }
             if (interrupt2Status[1])
             {
                 label18.ForeColor = Color.Red;
-            }
-            else
-            {
-                label18.ForeColor = Color.Black;
             }
             if (interrupt2Status[2])
             {
                 label19.ForeColor = Color.Red;
             }
-            else
-            {
-                label19.ForeColor = Color.Black;
-            }
             if (interrupt2Status[3])
             {
                 label20.ForeColor = Color.Red;
-            }
-            else
-            {
-                label20.ForeColor = Color.Black;
             }
         }
     }

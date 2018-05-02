@@ -277,16 +277,19 @@ namespace AccelerometerConfig
             return false;
         }
 
-        public static short[] GetData()
+        public static double[] GetData()
         {
-            short[] data = new short[3];
+            double[] data = new double[3];
 
             I2CWriteAddr(Accel_Address, 0x29);
-            data[0] = BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            data[0] = (double) BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            data[0] /= 16000;
             I2CWriteAddr(Accel_Address, 0x2B);
-            data[1] = BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            data[1] = (double) BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            data[1] /= 16000;
             I2CWriteAddr(Accel_Address, 0x2D);
-            data[2] = BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            data[2] = (double) BitConverter.ToInt16(I2CRead(Accel_Address, 2), 0);
+            data[2] /= 16000;
             return data;
         }
 
@@ -317,7 +320,7 @@ namespace AccelerometerConfig
             else if (hz < 5376) val = 128;
             else val = 144;
 
-            val += 7;
+            val += 15;
             byte[] v = { (byte)val };
             I2CWrite(Accel_Address, 0x20, v);
         }
@@ -344,7 +347,7 @@ namespace AccelerometerConfig
 
         public static void EnableInterrupts()
         {
-            byte[] data = new byte[1] { 0x3F };
+            byte[] data = new byte[1] { 0xFF };
             I2CWrite(Accel_Address, 0x30, data);
             I2CWrite(Accel_Address, 0x34, data);
         }
@@ -394,7 +397,7 @@ namespace AccelerometerConfig
                 {
                     status[0] = true;
                 }
-                if(bits[5] || bits[4])
+                if(bits[1] || bits[0])
                 {
                     status[1] = true;
                 }
@@ -402,7 +405,7 @@ namespace AccelerometerConfig
                 {
                     status[2] = true;
                 }
-                if(bits[1] || bits[0])
+                if(bits[5] || bits[4])
                 {
                     status[3] = true;
                 }
@@ -456,7 +459,7 @@ namespace AccelerometerConfig
                 {
                     status[0] = true;
                 }
-                if (bits[5] || bits[4])
+                if (bits[1] || bits[0])
                 {
                     status[1] = true;
                 }
@@ -464,7 +467,7 @@ namespace AccelerometerConfig
                 {
                     status[2] = true;
                 }
-                if (bits[1] || bits[0])
+                if (bits[5] || bits[4])
                 {
                     status[3] = true;
                 }
