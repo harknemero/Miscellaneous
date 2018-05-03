@@ -277,6 +277,7 @@ namespace AccelerometerConfig
             return false;
         }
 
+        // Returns an array containing the X, Y, and Z axis output (in that order)
         public static double[] GetData()
         {
             double[] data = new double[3];
@@ -293,6 +294,7 @@ namespace AccelerometerConfig
             return data;
         }
 
+        // Returns a string describing some of the current accelerometer settings.
         public static string GetConfiguration()
         {
             StringBuilder sb = new StringBuilder();
@@ -306,6 +308,7 @@ namespace AccelerometerConfig
             return sb.ToString();
         }
 
+        // Takes any int value and sets the accelerometer to the frequency closest to that value.
         public static void SetFrequency(int hz)
         {
             uint val = 0;
@@ -325,6 +328,7 @@ namespace AccelerometerConfig
             I2CWrite(Accel_Address, 0x20, v);
         }
 
+        // Returns a string describing the current sample frequency setting on the accelerometer.
         public static string GetFrequency()
         {
             I2CWriteAddr(Accel_Address, 0x20);
@@ -345,6 +349,7 @@ namespace AccelerometerConfig
             }
         }
 
+        // Configures the accelerometer interrupts by enabling them.
         public static void EnableInterrupts()
         {
             byte[] data = new byte[1] { 0xFF };
@@ -352,6 +357,7 @@ namespace AccelerometerConfig
             I2CWrite(Accel_Address, 0x34, data);
         }
 
+        // Returns a string describing the current threshold setting for the Interrupt 1 pin.
         public static string GetThreshold1()
         {
             I2CWriteAddr(Accel_Address, 0x32);
@@ -361,6 +367,7 @@ namespace AccelerometerConfig
             return "" + v + "g";
         }
 
+        // Sets the threshold setting for the Interrupt 1 pin.
         public static void SetThreshold1(double val)
         {
             ushort temp = (ushort) (val * 1000 / 16);
@@ -368,6 +375,7 @@ namespace AccelerometerConfig
             I2CWrite(Accel_Address, 0x32, data);
         }
 
+        // Returns a string describing the current duration setting for the Interrupt 1 pin.        
         public static string GetDuration1()
         {
             I2CWriteAddr(Accel_Address, 0x33);
@@ -377,6 +385,7 @@ namespace AccelerometerConfig
             return "" + v + "s";
         }
 
+        // Sets the duration for the Interrupt 1 pin.
         public static void SetDuration1(double val)
         {
             ushort temp = (ushort)(val * 10);
@@ -384,6 +393,8 @@ namespace AccelerometerConfig
             I2CWrite(Accel_Address, 0x33, data);
         }
 
+        // Returns an array of boolean values representing the status of the Interrupt 1 pin.
+        // Boolean values represent overall interrupt, X axis, Y axis, and Z axis (in that order).
         public static bool[] GetInterruptStatus1()
         {
             bool[] status = new bool[4] { false, false, false, false };
@@ -414,6 +425,7 @@ namespace AccelerometerConfig
             return status;
         }
 
+        // Returns a string describing the threshold value for the Interrupt 2 pin.
         public static string GetThreshold2()
         {
             I2CWriteAddr(Accel_Address, 0x36);
@@ -423,6 +435,7 @@ namespace AccelerometerConfig
             return "" + v + "g";
         }
 
+        // Sets the threshold value for the Interrupt 2 pin.
         public static void SetThreshold2(double val)
         {
             ushort temp = (ushort)(val * 1000 / 16);
@@ -430,6 +443,7 @@ namespace AccelerometerConfig
             I2CWrite(Accel_Address, 0x36, data);
         }
 
+        // Returns a string describing the duration for the Interrupt 2 pin.
         public static string GetDuration2()
         {
             I2CWriteAddr(Accel_Address, 0x37);
@@ -439,6 +453,7 @@ namespace AccelerometerConfig
             return "" + v + "s";
         }
 
+        // Sets the duration for the Interrupt 2 pin.
         public static void SetDuration2(double val)
         {
             ushort temp = (ushort)(val * 10);
@@ -446,6 +461,8 @@ namespace AccelerometerConfig
             I2CWrite(Accel_Address, 0x37, data);
         }
 
+        // Returns a boolean array representing the interrupt status for the Interrupt 2 pin.
+        // Boolean values represent overall interrupt, X axis, Y axis, and Z axis (in that order).
         public static bool[] GetInterruptStatus2()
         {
             bool[] status = new bool[4] { false, false, false, false };

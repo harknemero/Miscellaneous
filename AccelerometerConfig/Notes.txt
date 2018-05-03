@@ -17,6 +17,7 @@ I2C Operation
 
 		0x20 = CTRL_REG1 (Use this to disable/enable any axis or adjust the sample rate)
 			Default = 0x07 (unpowered mode)
+			Disable an axis in order to have interrupt trip on values below 0.7g.
 		0x21 = CTRL_REG2 (Use this to disable/enable high-pass filtering to eliminate offset of acceleration output)
 		0x24 = CTRL_REG5 (Use this register to set latch options)
 			bit 5 = INT1 latch (default: 0 = unlatched)
@@ -45,7 +46,8 @@ I2C Operation
 		0x36 = INT2_THS (Set interrupt threshold)
 		0x37 = INT2_DURATION (Set duration required to send interrupt)
 
-
+References:
+	mcp2221_dll_m_dotnetv4_x64.dll
 
 
 Questions:
