@@ -23,7 +23,7 @@ namespace AccelerometerConfig
 
         public Form1()
         {
-            I2CAccelerometerControl.Open();
+            MCUSBI2C.Open();
             connected = false;
             continuePolling = true;
             pollInterval = 0; // Set to zero for continuous polling
@@ -80,8 +80,8 @@ namespace AccelerometerConfig
 
                 if (!connected)
                 {
-                    I2CAccelerometerControl.Close();
-                    I2CAccelerometerControl.Open();
+                    MCUSBI2C.Close();
+                    MCUSBI2C.Open();
                     pollCounter = 0;
                     configString = "";
                 }
